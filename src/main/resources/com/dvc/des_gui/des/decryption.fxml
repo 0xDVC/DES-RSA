@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="266.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dvc.des_gui.des.controllers.DecryptionController">
+   <children>
+      <Text layoutX="138.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DECRYPTION">
+         <font>
+            <Font name="JetBrains Mono ExtraBold" size="31.0" />
+         </font>
+      </Text>
+      <TextField fx:id="encryptionKey" layoutX="157.0" layoutY="86.0" prefHeight="26.0" prefWidth="277.0" />
+      <Button fx:id="provideBtn" layoutX="23.0" layoutY="86.0" mnemonicParsing="false" text="PROVIDE KEY🔑">
+         <font>
+            <Font name="JetBrains Mono Regular" size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="browse" layoutX="23.0" layoutY="132.0" mnemonicParsing="false" text="BROWSE FILE🗂️">
+         <font>
+            <Font name="JetBrains Mono Regular" size="13.0" />
+         </font>
+      </Button>
+      <Text layoutX="146.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+         <font>
+            <Font name="JetBrains Mono Regular" size="16.0" />
+         </font>
+      </Text>
+      <Text fx:id="fileName" layoutX="157.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="277.0">
+         <font>
+            <Font name="JetBrains Mono Regular" size="13.0" />
+         </font>
+      </Text>
+      <Button fx:id="decryptBtn" layoutX="169.0" layoutY="194.0" mnemonicParsing="false" onAction="#decryption" text="DECRYPT...">
+         <font>
+            <Font name="JetBrains Mono Bold" size="17.0" />
+         </font>
+      </Button>
+      <Text fx:id="timeTaken" layoutX="23.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="151.0">
+         <font>
+            <Font name="JetBrains Mono Regular" size="12.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

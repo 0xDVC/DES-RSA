@@ -1,0 +1,2 @@
+Manifest-Version: 1.0
+Main-Class: com.dvc.des_gui.des.DESApplication
