@@ -39,7 +39,7 @@
             <Font name="JetBrains Mono Bold" size="17.0" />
          </font>
       </Button>
-      <Text fx:id="timeTaken" layoutX="23.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="151.0">
+      <Text fx:id="timeTaken" fill="#3b8325" layoutX="23.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="186.00001525878906">
          <font>
             <Font name="JetBrains Mono Regular" size="12.0" />
          </font>

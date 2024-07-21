@@ -66,12 +66,19 @@ public class EncryptionController {
         try (BufferedReader reader = new BufferedReader(new FileReader(_file))) {
             StringBuilder fileText = new StringBuilder();
             String line;
+            long startTime = System.nanoTime();
 
             while ((line = reader.readLine()) != null) {
                 fileText.append(line);
             }
+
             String encryptedText = DES.encrypt(fileText.toString(), encryptionKey.getText());
             writeToFile(encryptedText);
+
+            long endTime = System.nanoTime();
+            long encryptionTime = (endTime - startTime) / 1_000_000;
+
+            timeTaken.setText("Finished in " + encryptionTime + " ms");
 
         } catch (EncryptionException | IOException e) {
             throw new RuntimeException(e);
