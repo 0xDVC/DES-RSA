@@ -17,9 +17,6 @@ import java.io.*;
 
 public class DecryptionController {
     @FXML
-    private Button browse;
-
-    @FXML
     private Button backBtn;
 
     @FXML
@@ -32,10 +29,10 @@ public class DecryptionController {
     private Text fileName;
 
     @FXML
-    private Button provideBtn;
-
-    @FXML
     private Text timeTaken;
+
+    private File file;
+    private final static int KEY_LENGTH = 20;
 
     @FXML
     void desScreen() throws IOException {
@@ -52,7 +49,9 @@ public class DecryptionController {
         newStage.show();
     }
 
-    private File _file;
+    private boolean isReadyForDecryption() {
+        return file != null && encryptionKey.getText().length() == KEY_LENGTH;
+    }
 
     @FXML
     void getFile() {
@@ -62,7 +61,7 @@ public class DecryptionController {
         if (file != null) {
             fileName.setText(file.getName());
         }
-        this._file = file;
+        this.file = file;
     }
 
     void writeToFile(String encryptedText) {
@@ -79,7 +78,11 @@ public class DecryptionController {
 
     @FXML
     void decryption() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(_file))) {
+        if (!isReadyForDecryption()) {
+            return;
+        }
+        decryptBtn.setDisable(false);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             StringBuilder fileText = new StringBuilder();
             String line;
             long startTime = System.nanoTime();

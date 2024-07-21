@@ -18,9 +18,6 @@ import java.util.HexFormat;
 
 public class EncryptionController {
     @FXML
-    private Button browse;
-
-    @FXML
     private Button backBtn;
 
     @FXML
@@ -33,10 +30,14 @@ public class EncryptionController {
     private Text fileName;
 
     @FXML
-    private Button generateBtn;
-
-    @FXML
     private Text timeTaken;
+
+    private File file;
+    private final static int KEY_LENGTH = 20;
+
+    private boolean isReadyForDecryption() {
+        return file != null && encryptionKey.getText().length() == KEY_LENGTH;
+    }
 
     @FXML
     void desScreen() throws IOException {
@@ -48,7 +49,6 @@ public class EncryptionController {
         encryptionKey.setText(generateRandomKey());
     }
 
-    private File _file;
 
     @FXML
     void getFile() {
@@ -58,12 +58,21 @@ public class EncryptionController {
         if (file != null) {
             fileName.setText(file.getName());
         }
-        this._file = file;
+        this.file = file;
+
+        if(isReadyForDecryption()) {
+            encryptBtn.setDisable(false);
+        }
+
     }
 
     @FXML
     void encryption() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(_file))) {
+        if (!isReadyForDecryption()) {
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             StringBuilder fileText = new StringBuilder();
             String line;
             long startTime = System.nanoTime();

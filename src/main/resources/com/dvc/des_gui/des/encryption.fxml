@@ -34,7 +34,7 @@
             <Font name="JetBrains Mono Regular" size="13.0" />
          </font>
       </Text>
-      <Button fx:id="encryptBtn" layoutX="169.0" layoutY="194.0" mnemonicParsing="false" onAction="#encryption" text="ENCRYPT...">
+      <Button fx:id="encryptBtn" disable="true" layoutX="169.0" layoutY="194.0" mnemonicParsing="false" onAction="#encryption" text="ENCRYPT...">
          <font>
             <Font name="JetBrains Mono Bold" size="17.0" />
          </font>
