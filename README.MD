@@ -1,6 +1,9 @@
 # DES GUI IMPLEMENTATION
 This project is a simple implementation of the DES algorithm using JavaFX for the GUI. The project is a simple implementation of the DES algorithm and is not intended for production use. The project is intended for educational purposes only, tailored for CE372 Cryptography Labwork
 
+![DES GUI](screenshot.png)
+![Encryption](screenshot1.png)
+![Decryption](screenshot1.png)
 ## PROJECT STRUCTURE
 ```main
 ├── java
