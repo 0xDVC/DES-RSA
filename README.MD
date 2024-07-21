@@ -30,3 +30,11 @@ This project is a simple implementation of the DES algorithm using JavaFX for th
                     └── main.fxml
 
 ```
+
+## HOW TO RUN THE PROJECT
+1. Clone the repository
+2. Open your terminal and navigate to the project directory
+3. Run the following command to build the project
+```shell    
+    mvn clean package
+```

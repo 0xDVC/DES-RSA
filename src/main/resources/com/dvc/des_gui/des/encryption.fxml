@@ -14,12 +14,12 @@
          </font>
       </Text>
       <TextField fx:id="encryptionKey" editable="false" layoutX="157.0" layoutY="86.0" prefHeight="26.0" prefWidth="277.0" />
-      <Button fx:id="generateBtn" layoutX="23.0" layoutY="86.0" mnemonicParsing="false" text="GENERATE KEY🔑">
+      <Button fx:id="generateBtn" layoutX="23.0" layoutY="86.0" mnemonicParsing="false" onAction="#generateKey" text="GENERATE KEY🔑">
          <font>
             <Font name="JetBrains Mono Regular" size="13.0" />
          </font>
       </Button>
-      <Button fx:id="browse" layoutX="23.0" layoutY="132.0" mnemonicParsing="false" text="BROWSE FILE🗂️">
+      <Button fx:id="browse" layoutX="23.0" layoutY="132.0" mnemonicParsing="false" onAction="#getFile" text="BROWSE FILE🗂️">
          <font>
             <Font name="JetBrains Mono Regular" size="13.0" />
          </font>
@@ -44,5 +44,10 @@
             <Font name="JetBrains Mono Regular" size="12.0" />
          </font>
       </Text>
+      <Button fx:id="backBtn" layoutX="23.0" layoutY="32.0" mnemonicParsing="false" onAction="#desScreen" prefHeight="27.0" prefWidth="50.0" style="-fx-background-color: none; -fx-border-color: #000; -fx-border-radius: 7px;" text="🔙">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
