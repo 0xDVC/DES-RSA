@@ -18,10 +18,8 @@ This project is a simple implementation of the DES algorithm using JavaFX for th
 │   │               │   ├── DecryptionController.java
 │   │               │   └── EncryptionController.java
 │   │               └── core
-│   │                   ├── DES.java
-│   │                   └── exception
-│   │                       ├── DecryptionException.java
-│   │                       └── EncryptionException.java
+│   │                   └── DES.java
+│   │                   
 │   └── module-info.java
 └── resources
     ├── MANIFEST.MF
@@ -34,4 +32,3 @@ This project is a simple implementation of the DES algorithm using JavaFX for th
                     └── main.fxml
 
 ```
-_Work still ongoing_**
