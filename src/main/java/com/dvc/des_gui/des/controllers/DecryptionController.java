@@ -2,18 +2,24 @@ package com.dvc.des_gui.des.controllers;
 
 import com.dvc.des_gui.des.DESApplication;
 import com.dvc.des_gui.des.core.DES;
-import com.dvc.des_gui.des.core.exception.DecryptionException;
-import com.dvc.des_gui.des.core.exception.EncryptionException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import javax.crypto.BadPaddingException;
 import java.io.*;
+import java.security.NoSuchAlgorithmException;
+import java.nio.file.Files;
 
 public class DecryptionController {
     @FXML
@@ -32,7 +38,7 @@ public class DecryptionController {
     private Text timeTaken;
 
     private File file;
-    private final static int KEY_LENGTH = 20;
+    private final static int KEY_LENGTH = 16;
 
     @FXML
     void desScreen() throws IOException {
@@ -62,45 +68,64 @@ public class DecryptionController {
             fileName.setText(file.getName());
         }
         this.file = file;
+
+        if(isReadyForDecryption()) {
+            decryptBtn.setDisable(false);
+        }
     }
 
-    void writeToFile(String encryptedText) {
+    void writeToFile(byte[] data) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Encrypted File");
+        fileChooser.setTitle("Save Decrypted File");
         File file = fileChooser.showSaveDialog(new Stage());
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(encryptedText);
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(data);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    byte[] readFromFile(File file) throws IOException {
+        return Files.readAllBytes(file.toPath());
+    }
 
     @FXML
     void decryption() {
-        if (!isReadyForDecryption()) {
-            return;
-        }
-        decryptBtn.setDisable(false);
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            StringBuilder fileText = new StringBuilder();
-            String line;
+        try {
+            byte[] fileData = readFromFile(file);
+
+            DES des = new DES();
+            des.setKey(encryptionKey.getText());
             long startTime = System.nanoTime();
+            try {
+                byte[] decryptedData = des.decrypt(fileData);
+                long endTime = System.nanoTime();
+                long decryptionTime = (endTime - startTime) / 1_000_000;
 
-            while ((line = reader.readLine()) != null) {
-                fileText.append(line);
+                writeToFile(decryptedData);
+
+                timeTaken.setText("Finished in " + decryptionTime + " ms");
+            } catch (BadPaddingException e) {
+                setTemporaryRedBorder(encryptionKey);
             }
-
-            String encryptedText = DES.decrypt(fileText.toString(), encryptionKey.getText());
-            writeToFile(encryptedText);
-
-            long endTime = System.nanoTime();
-            long encryptionTime = (endTime - startTime) / 1_000_000;
-
-            timeTaken.setText("Finished in " + encryptionTime + " ms");
-
-        } catch (DecryptionException | IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void setTemporaryRedBorder(TextField textField) {
+        Border originalBorder = textField.getBorder();
+
+        Border redBorder = new Border(new BorderStroke(
+                Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+
+        textField.setBorder(redBorder);
+
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.seconds(2),
+                event -> textField.setBorder(originalBorder)
+        ));
+        timeline.setCycleCount(1);
+        timeline.play();
     }
 }

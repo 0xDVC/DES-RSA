@@ -1,54 +1,45 @@
 package com.dvc.des_gui.des.core;
 
-import com.dvc.des_gui.des.core.exception.DecryptionException;
-import com.dvc.des_gui.des.core.exception.EncryptionException;
-
-import javax.crypto.*;
-import java.security.InvalidKeyException;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import javax.crypto.spec.DESKeySpec;
-import java.util.Base64;
+import java.util.HexFormat;
 
 public class DES {
-    private static final String ALGORITHM = "DES";
 
-    public static String encrypt(String plaintext, String key) throws EncryptionException {
-        try {
-            byte[] plaintextBytes = plaintext.getBytes();
-            byte[] ciphertextBytes = encrypt(plaintextBytes, key);
-            return Base64.getEncoder().encodeToString(ciphertextBytes);
-        } catch (Exception e) {
-            throw new EncryptionException("Error encrypting data", e);
-        }
+    private SecretKey myDesKey;
+
+    public DES() throws NoSuchAlgorithmException {
+        generateKey();
     }
 
-    public static String decrypt(String ciphertext, String key) throws DecryptionException {
-        try {
-            byte[] ciphertextBytes = Base64.getDecoder().decode(ciphertext);
-            byte[] plaintextBytes = decrypt(ciphertextBytes, key);
-            return new String(plaintextBytes);
-        } catch (Exception e) {
-            throw new DecryptionException("Error decrypting data", e);
-        }
+    private void generateKey() throws NoSuchAlgorithmException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("DES");
+        keyGenerator.init(56);
+        myDesKey = keyGenerator.generateKey();
     }
 
-    private static byte[] encrypt(byte[] plaintextBytes, String key) throws Exception {
-        SecretKey desKey = getSymmetricKey(key);
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, desKey);
-        return cipher.doFinal(plaintextBytes);
+    public byte[] encrypt(String plainText) throws Exception {
+        Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+        desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
+        return desCipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
     }
 
-    private static byte[] decrypt(byte[] ciphertextBytes, String key) throws Exception {
-        SecretKey desKey = getSymmetricKey(key);
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, desKey);
-        return cipher.doFinal(ciphertextBytes);
+    public byte[] decrypt(byte[] encryptedData) throws Exception {
+        Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+        desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
+        return desCipher.doFinal(encryptedData);
     }
 
-    private static SecretKey getSymmetricKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
-        return SecretKeyFactory.getInstance(ALGORITHM)
-                .generateSecret(new DESKeySpec(key.getBytes()));
+    public String getKey() {
+        return HexFormat.of().formatHex(myDesKey.getEncoded());
+    }
+
+    public void setKey(String key) {
+        byte[] keyBytes = HexFormat.of().parseHex(key);
+        myDesKey = new SecretKeySpec(keyBytes, "DES");
     }
 }
