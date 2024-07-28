@@ -3,6 +3,10 @@ package com.dvc.des_gui.des.core;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class RSA {
     private BigInteger p;
@@ -86,27 +90,47 @@ public class RSA {
         System.out.println("Enter plaintext to encrypt:");
         String plaintext = scanner.nextLine();
 
-        // Measure encryption time
         long startEncrypt = System.nanoTime();
         String ciphertext = rsa.encrypt(plaintext);
         long endEncrypt = System.nanoTime();
-        long encryptionTime = (endEncrypt - startEncrypt) / 1_000_000; // Time in milliseconds
+        long encryptionTime = (endEncrypt - startEncrypt) / 1_000;
 
-        System.out.println("Ciphertext:");
-        System.out.println(ciphertext);
-        System.out.println("Encryption time: " + encryptionTime + " ms");
+        writeFile(ciphertext);
 
-        System.out.println("Enter ciphertext to decrypt:");
-        String inputCiphertext = scanner.nextLine();
+        System.out.println("Ciphertext written to ciphertext.txt");
+        System.out.println("Encryption time: " + encryptionTime + " µs");
 
-        // Measure decryption time
-        long startDecrypt = System.nanoTime();
-        String decryptedText = rsa.decrypt(inputCiphertext);
-        long endDecrypt = System.nanoTime();
-        long decryptionTime = (endDecrypt - startDecrypt) / 1_000_000; // Time in milliseconds
+        System.out.println("Do you want to decrypt the ciphertext? (y/n)");
+        String response = scanner.nextLine();
+        if (response.equalsIgnoreCase("y")) {
+            try {
+                String fileCiphertext = readFile();
 
-        System.out.println("Decrypted text:");
-        System.out.println(decryptedText);
-        System.out.println("Decryption time: " + decryptionTime + " ms");
+                long startDecrypt = System.nanoTime();
+                String decryptedText = rsa.decrypt(fileCiphertext);
+                long endDecrypt = System.nanoTime();
+                long decryptionTime = (endDecrypt - startDecrypt) / 1_000;
+
+                System.out.println("Decrypted text:");
+                System.out.println(decryptedText);
+                System.out.println("Decryption time: " + decryptionTime + " µs");
+            } catch (IOException e) {
+                System.out.println("Error reading from file: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Decryption skipped.");
+        }
+    }
+
+    private static void writeFile(String content) {
+        try (FileWriter fileWriter = new FileWriter("ciphertext.txt", false)) {
+            fileWriter.write(content);
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    private static String readFile() throws IOException {
+        return new String(Files.readAllBytes(Paths.get("ciphertext.txt")));
     }
 }

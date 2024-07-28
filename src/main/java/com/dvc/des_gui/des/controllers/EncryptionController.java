@@ -80,11 +80,11 @@ public class EncryptionController {
             long startTime = System.nanoTime();
             byte[] encryptedData = des.encrypt(new String(fileData));
             long endTime = System.nanoTime();
-            long encryptionTime = (endTime - startTime) / 1_000_000;
+            long encryptionTime = (endTime - startTime) / 1_000;
 
             writeToFile(encryptedData);
 
-            timeTaken.setText("Finished in " + encryptionTime + " ms");
+            timeTaken.setText("Finished in " + encryptionTime + " µs");
 
         } catch (Exception e) {
             throw new RuntimeException(e);

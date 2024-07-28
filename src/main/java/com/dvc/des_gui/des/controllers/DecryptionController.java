@@ -100,11 +100,11 @@ public class DecryptionController {
             try {
                 byte[] decryptedData = des.decrypt(fileData);
                 long endTime = System.nanoTime();
-                long decryptionTime = (endTime - startTime) / 1_000_000;
+                long decryptionTime = (endTime - startTime) / 1_000;
 
                 writeToFile(decryptedData);
 
-                timeTaken.setText("Finished in " + decryptionTime + " ms");
+                timeTaken.setText("Finished in " + decryptionTime + " µs");
             } catch (BadPaddingException e) {
                 setTemporaryRedBorder(encryptionKey);
             }
